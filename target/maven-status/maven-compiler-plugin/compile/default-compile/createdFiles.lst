@@ -1,0 +1,12 @@
+edu\unicauca\apliweb\control\ServletAppDrogueria.class
+edu\unicauca\apliweb\persistence\entities\Producto.class
+edu\unicauca\apliweb\persistence\entities\Administrador.class
+edu\unicauca\apliweb\persistence\jpa\AdministradorJpaController.class
+edu\unicauca\apliweb\persistence\jpa\ProductoJpaController.class
+edu\unicauca\apliweb\persistence\jpa\ProveedorJpaController.class
+edu\unicauca\apliweb\persistence\jpa\CompraJpaController.class
+edu\unicauca\apliweb\persistence\jpa\exceptions\PreexistingEntityException.class
+edu\unicauca\apliweb\persistence\entities\Proveedor.class
+edu\unicauca\apliweb\persistence\jpa\exceptions\IllegalOrphanException.class
+edu\unicauca\apliweb\persistence\entities\Compra.class
+edu\unicauca\apliweb\persistence\jpa\exceptions\NonexistentEntityException.class
