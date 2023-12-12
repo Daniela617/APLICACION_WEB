@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : 10 dic. 2023, 16:03:27
-    Author     : Usuario
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,17 +19,13 @@
       class="bg-white p-5 rounded-5 text-secondary shadow"
       style="width: 25rem"
     >
-      <div class="d-flex justify-content-center">
-        👋
+      <div class="d-flex justify-content-center" style="font-size: 5rem;">
+        🌐
       </div>
       <div class="text-center fs-1 fw-bold">Login</div>
       <div class="input-group mt-4">
-        <div class="input-group-text bg-info">
-          <img
-            src="./assets/username-icon.svg"
-            alt="username-icon"
-            style="height: 1rem"
-          />
+        <div class="input-group-text bg-info" style="color: white;">
+          🧑‍
         </div>
         <input
           class="form-control bg-light"
@@ -46,11 +36,7 @@
       </div>
       <div class="input-group mt-1">
         <div class="input-group-text bg-info">
-          <img
-            src="./assets/password-icon.svg"
-            alt="password-icon"
-            style="height: 1rem"
-          />
+          🔐
         </div>
         <input
           class="form-control bg-light"
@@ -68,7 +54,7 @@
         </div>
       </div>
       <div class="btn btn-info text-white w-100 mt-4 fw-semibold shadow-sm">
-        Login
+        Iniciar Sesión
       </div>
     </div>
   </body>

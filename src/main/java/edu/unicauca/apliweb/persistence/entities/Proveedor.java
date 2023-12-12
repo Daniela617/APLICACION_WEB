@@ -40,7 +40,7 @@ public class Proveedor implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "COD_PROVEEDOR")
-    private Long codProveedor;
+    private Integer codProveedor;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -67,11 +67,11 @@ public class Proveedor implements Serializable {
     public Proveedor() {
     }
 
-    public Proveedor(Long codProveedor) {
+    public Proveedor(Integer codProveedor) {
         this.codProveedor = codProveedor;
     }
 
-    public Proveedor(Long codProveedor, String nombreProveedor, String telProveedor, String correoProveedor, String dirProveedor) {
+    public Proveedor(Integer codProveedor, String nombreProveedor, String telProveedor, String correoProveedor, String dirProveedor) {
         this.codProveedor = codProveedor;
         this.nombreProveedor = nombreProveedor;
         this.telProveedor = telProveedor;
@@ -79,11 +79,11 @@ public class Proveedor implements Serializable {
         this.dirProveedor = dirProveedor;
     }
 
-    public Long getCodProveedor() {
+    public Integer getCodProveedor() {
         return codProveedor;
     }
 
-    public void setCodProveedor(Long codProveedor) {
+    public void setCodProveedor(Integer codProveedor) {
         this.codProveedor = codProveedor;
     }
 

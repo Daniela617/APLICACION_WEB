@@ -11,10 +11,13 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,8 +49,8 @@ public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "COD_PRODUCTO")
     private Integer codProducto;
     @Basic(optional = false)
@@ -71,7 +74,7 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRODUCTO_CANTIDAD")
-    private short productoCantidad;
+    private int productoCantidad;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 15)
@@ -84,6 +87,12 @@ public class Producto implements Serializable {
     private List<Proveedor> proveedorList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codProducto")
     private List<Compra> compraList;
+    @JoinColumn(name = "COD_CATEGORIA", referencedColumnName = "COD_CATEGORIA")
+    @ManyToOne
+    private Categoria codCategoria;
+    @JoinColumn(name = "COD_DEVOLUCION", referencedColumnName = "COD_DEVOLUCION")
+    @ManyToOne
+    private RegistroDevolucion codDevolucion;
 
     public Producto() {
     }
@@ -92,7 +101,7 @@ public class Producto implements Serializable {
         this.codProducto = codProducto;
     }
 
-    public Producto(Integer codProducto, String nombreProducto, int precioPublicoPrd, int precioCompraPrd, Date fechaVencimientoPrd, short productoCantidad, String laboratorio) {
+    public Producto(Integer codProducto, String nombreProducto, int precioPublicoPrd, int precioCompraPrd, Date fechaVencimientoPrd, int productoCantidad, String laboratorio) {
         this.codProducto = codProducto;
         this.nombreProducto = nombreProducto;
         this.precioPublicoPrd = precioPublicoPrd;
@@ -142,11 +151,11 @@ public class Producto implements Serializable {
         this.fechaVencimientoPrd = fechaVencimientoPrd;
     }
 
-    public short getProductoCantidad() {
+    public int getProductoCantidad() {
         return productoCantidad;
     }
 
-    public void setProductoCantidad(short productoCantidad) {
+    public void setProductoCantidad(int productoCantidad) {
         this.productoCantidad = productoCantidad;
     }
 
@@ -174,6 +183,22 @@ public class Producto implements Serializable {
 
     public void setCompraList(List<Compra> compraList) {
         this.compraList = compraList;
+    }
+
+    public Categoria getCodCategoria() {
+        return codCategoria;
+    }
+
+    public void setCodCategoria(Categoria codCategoria) {
+        this.codCategoria = codCategoria;
+    }
+
+    public RegistroDevolucion getCodDevolucion() {
+        return codDevolucion;
+    }
+
+    public void setCodDevolucion(RegistroDevolucion codDevolucion) {
+        this.codDevolucion = codDevolucion;
     }
 
     @Override

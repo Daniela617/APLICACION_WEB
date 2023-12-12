@@ -61,8 +61,8 @@ create table TRABAJADOR
 create table ADMINISTRADOR
 (
    CC_USUARIO           INT not null,
-   SUELDO_ADMIN         numeric(10,0) not null,
-   COMISIONES_ADMIN     numeric(10,0) not null,
+   SUELDO_ADMIN         INT not null,
+   COMISIONES_ADMIN     INT not null,
    primary key (CC_USUARIO)
 );
 
@@ -83,7 +83,7 @@ create table ATENCION_MEDICA
 /*==============================================================*/
 create table CATEGORIA
 (
-   COD_CATEGORIA        numeric(3,0) not null,
+   COD_CATEGORIA        INT not null,
    NOMBRE_CAT           varchar(50) not null,
    primary key (COD_CATEGORIA)
 );
@@ -93,7 +93,7 @@ create table CATEGORIA
 /*==============================================================*/
 create table CLIENTE
 (
-   CC_CLIENTE           numeric(10,0) not null,
+   CC_CLIENTE           INT not null,
    FECHA_ATMEDICA       date,
    NOMBRE_CLIENTE       varchar(15) not null,
    DIR_CLIENTE          varchar(15) not null,
@@ -106,14 +106,14 @@ create table CLIENTE
 /*==============================================================*/
 create table COMPRA
 (
-   ID_COMPRA            numeric(10,0) not null,
-   COD_PRODUCTO         numeric(5,0) not null,
+   ID_COMPRA            INT not null,
+   COD_PRODUCTO         INT not null,
    CC_USUARIO           INT,
    FECHA_COMPRA         date not null,
-   VALOR_COMPRA         numeric(10,0) not null,
-   CNT_PRODUCTOS        numeric(4,0) not null,
-   SUBTOTAL_COMPRA      numeric(10,2) not null,
-   PRECIO_UNITARIO_COMPRA numeric(10,2) not null,
+   VALOR_COMPRA         INT not null,
+   CNT_PRODUCTOS        INT not null,
+   SUBTOTAL_COMPRA      INT not null,
+   PRECIO_UNITARIO_COMPRA INT not null,
    primary key (ID_COMPRA)
 );
 
@@ -122,12 +122,12 @@ create table COMPRA
 /*==============================================================*/
 create table DETALLE_FACTURA
 (
-   ID_VENTA             numeric(10,0) not null,
-   COD_PROMOCION        numeric(4,0) not null,
-   COD_PRODUCTO         numeric(5,0) not null,
-   CANTIDAD_PRODUCTOS   numeric(4,0) not null,
-   SUBTOTAL_FACTURA     numeric(10,2) not null,
-   PRECIO_UNITARIO_FACTURA numeric(10,2) not null,
+   ID_VENTA             INT not null,
+   COD_PROMOCION        INT not null,
+   COD_PRODUCTO         INT not null,
+   CANTIDAD_PRODUCTOS   INT not null,
+   SUBTOTAL_FACTURA     INT not null,
+   PRECIO_UNITARIO_FACTURA INT not null,
    primary key (ID_VENTA, COD_PROMOCION, COD_PRODUCTO)
 );
 
@@ -136,8 +136,8 @@ create table DETALLE_FACTURA
 /*==============================================================*/
 create table DISTRIBUCION
 (
-   COD_PROVEEDOR        numeric(10,0) not null,
-   COD_PRODUCTO         numeric(5,0) not null,
+   COD_PROVEEDOR        INT not null,
+   COD_PRODUCTO         INT not null,
    primary key (COD_PROVEEDOR, COD_PRODUCTO)
 );
 
@@ -146,9 +146,9 @@ create table DISTRIBUCION
 /*==============================================================*/
 create table DOMICILIARIO
 (
-   CC_DOMICILIARIO      numeric(15,0) not null,
+   CC_DOMICILIARIO      INT not null,
    NOMBRE_DOMICILIARIO  varchar(20) not null,
-   TEL_DOMICILIARIO     numeric(15,0) not null,
+   TEL_DOMICILIARIO     INT not null,
    DIR_DOMICILIARIO     varchar(20) not null,
    CORREO_DOMICILIARIO  varchar(20) not null,
    primary key (CC_DOMICILIARIO)
@@ -159,12 +159,12 @@ create table DOMICILIARIO
 /*==============================================================*/
 create table FACTURA
 (
-   ID_VENTA             numeric(10,0) not null,
-   CC_CLIENTE           numeric(10,0) not null,
-   CC_DOMICILIARIO      numeric(15,0),
+   ID_VENTA             INT not null,
+   CC_CLIENTE           INT not null,
+   CC_DOMICILIARIO      INT,
    CC_USUARIO           INT not null,
    FECHA_VENTA          date not null,
-   VALOR_VENTA          numeric(10,0) not null,
+   VALOR_VENTA          INT not null,
    primary key (ID_VENTA)
 );
 
@@ -173,16 +173,15 @@ create table FACTURA
 /*==============================================================*/
 create table PRODUCTO
 (
-   COD_PRODUCTO         numeric(5,0) not null,
-   COD_DEVOLUCION       numeric(15,0),
-   COD_CATEGORIA        numeric(3,0) not null,
+   COD_PRODUCTO         INT AUTO_INCREMENT PRIMARY KEY not null,
+   COD_DEVOLUCION       INT,
+   COD_CATEGORIA        INT,
    NOMBRE_PRODUCTO      varchar(15) not null,
-   PRECIO_PUBLICO_PRD   numeric(7,0) not null,
-   PRECIO_COMPRA_PRD    numeric(7,0) not null,
+   PRECIO_PUBLICO_PRD   INT not null,
+   PRECIO_COMPRA_PRD    INT not null,
    FECHA_VENCIMIENTO_PRD date not null,
-   PRODUCTO_CANTIDAD    numeric(4,0) not null,
-   LABORATORIO          varchar(15) not null,
-   primary key (COD_PRODUCTO)
+   PRODUCTO_CANTIDAD    INT not null,
+   LABORATORIO          varchar(15) not null
 );
 
 /*==============================================================*/
@@ -190,8 +189,8 @@ create table PRODUCTO
 /*==============================================================*/
 create table PROMOCION
 (
-   COD_PROMOCION        numeric(4,0) not null,
-   COD_PRODUCTO         numeric(5,0) not null,
+   COD_PROMOCION        INT not null,
+   COD_PRODUCTO         INT not null,
    FECHAINICIO_PROMO    date not null,
    FECHAFIN_PROMO       date not null,
    primary key (COD_PROMOCION, COD_PRODUCTO, FECHAINICIO_PROMO)
@@ -202,7 +201,7 @@ create table PROMOCION
 /*==============================================================*/
 create table PROVEEDOR
 (
-   COD_PROVEEDOR        numeric(10,0) not null,
+   COD_PROVEEDOR        INT not null,
    NOMBRE_PROVEEDOR     varchar(20) not null,
    TEL_PROVEEDOR        varchar(13) not null,
    CORREO_PROVEEDOR     varchar(45) not null,
@@ -226,8 +225,8 @@ create table REGENTE
 /*==============================================================*/
 create table REGISTRO_DEVOLUCION
 (
-   COD_DEVOLUCION       numeric(15,0) not null,
-   CC_CLIENTE           numeric(10,0) not null,
+   COD_DEVOLUCION       INT not null,
+   CC_CLIENTE           INT not null,
    CC_USUARIO           INT not null,
    FECHA_DEVOLUCION     date not null,
    MOTIVO_DEVOLUCION    text not null,
@@ -241,7 +240,7 @@ create table REPORTE
 (
    FECHA_REPORTE        date not null,
    CC_USUARIO           INT not null,
-   REGISTRO_REPORTE     numeric(3,3) not null,
+   REGISTRO_REPORTE     INT not null,
    TIPO_REPORTE         varchar(11) not null,
    primary key (FECHA_REPORTE)
 );
@@ -251,7 +250,7 @@ create table REPORTE
 /*==============================================================*/
 create table ROL
 (
-   ID_ROL               numeric(2,0) not null,
+   ID_ROL               INT not null,
    NOMBRE_ROL           varchar(15) not null,
    primary key (ID_ROL)
 );
@@ -261,8 +260,8 @@ create table ROL
 /*==============================================================*/
 create table TIPO_PROMOCION
 (
-   COD_PROMOCION        numeric(4,0) not null,
-   VALOR_PROMOCION      numeric(8,0) not null,
+   COD_PROMOCION        INT not null,
+   VALOR_PROMOCION      INT not null,
    DESCRIPCION          varchar(100) not null,
    primary key (COD_PROMOCION)
 );
@@ -273,7 +272,7 @@ create table TIPO_PROMOCION
 create table USUARIOROL
 (
    CC_USUARIO          INT not null,
-   ID_ROL               numeric(2,0) not null,
+   ID_ROL               INT not null,
    FECHAINICIOVIGENCIA  date not null,
    FECHAFINVIGENCIA     date not null,
    primary key (CC_USUARIO, ID_ROL, FECHAINICIOVIGENCIA)

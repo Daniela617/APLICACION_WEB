@@ -6,6 +6,12 @@
     <class>edu.unicauca.apliweb.persistence.entities.Administrador</class>
     <class>edu.unicauca.apliweb.persistence.entities.Producto</class>
     <class>edu.unicauca.apliweb.persistence.entities.Compra</class>
+    <class>edu.unicauca.apliweb.persistence.entities.Trabajador</class>
+    <class>edu.unicauca.apliweb.persistence.entities.AtencionMedica</class>
+    <class>edu.unicauca.apliweb.persistence.entities.Cliente</class>
+    <class>edu.unicauca.apliweb.persistence.entities.Regente</class>
+    <class>edu.unicauca.apliweb.persistence.entities.RegistroDevolucion</class>
+    <class>edu.unicauca.apliweb.persistence.entities.Categoria</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/drogueriaCRUD?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;serverTimezone=UTC"/>

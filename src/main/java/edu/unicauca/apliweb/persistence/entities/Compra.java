@@ -5,7 +5,6 @@
 package edu.unicauca.apliweb.persistence.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -43,7 +42,7 @@ public class Compra implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_COMPRA")
-    private Long idCompra;
+    private Integer idCompra;
     @Basic(optional = false)
     @NotNull
     @Column(name = "FECHA_COMPRA")
@@ -52,20 +51,19 @@ public class Compra implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "VALOR_COMPRA")
-    private long valorCompra;
+    private int valorCompra;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CNT_PRODUCTOS")
-    private short cntProductos;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    private int cntProductos;
     @Basic(optional = false)
     @NotNull
     @Column(name = "SUBTOTAL_COMPRA")
-    private BigDecimal subtotalCompra;
+    private int subtotalCompra;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRECIO_UNITARIO_COMPRA")
-    private BigDecimal precioUnitarioCompra;
+    private int precioUnitarioCompra;
     @JoinColumn(name = "CC_USUARIO", referencedColumnName = "CC_USUARIO")
     @ManyToOne
     private Administrador ccUsuario;
@@ -76,11 +74,11 @@ public class Compra implements Serializable {
     public Compra() {
     }
 
-    public Compra(Long idCompra) {
+    public Compra(Integer idCompra) {
         this.idCompra = idCompra;
     }
 
-    public Compra(Long idCompra, Date fechaCompra, long valorCompra, short cntProductos, BigDecimal subtotalCompra, BigDecimal precioUnitarioCompra) {
+    public Compra(Integer idCompra, Date fechaCompra, int valorCompra, int cntProductos, int subtotalCompra, int precioUnitarioCompra) {
         this.idCompra = idCompra;
         this.fechaCompra = fechaCompra;
         this.valorCompra = valorCompra;
@@ -89,11 +87,11 @@ public class Compra implements Serializable {
         this.precioUnitarioCompra = precioUnitarioCompra;
     }
 
-    public Long getIdCompra() {
+    public Integer getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(Long idCompra) {
+    public void setIdCompra(Integer idCompra) {
         this.idCompra = idCompra;
     }
 
@@ -105,35 +103,35 @@ public class Compra implements Serializable {
         this.fechaCompra = fechaCompra;
     }
 
-    public long getValorCompra() {
+    public int getValorCompra() {
         return valorCompra;
     }
 
-    public void setValorCompra(long valorCompra) {
+    public void setValorCompra(int valorCompra) {
         this.valorCompra = valorCompra;
     }
 
-    public short getCntProductos() {
+    public int getCntProductos() {
         return cntProductos;
     }
 
-    public void setCntProductos(short cntProductos) {
+    public void setCntProductos(int cntProductos) {
         this.cntProductos = cntProductos;
     }
 
-    public BigDecimal getSubtotalCompra() {
+    public int getSubtotalCompra() {
         return subtotalCompra;
     }
 
-    public void setSubtotalCompra(BigDecimal subtotalCompra) {
+    public void setSubtotalCompra(int subtotalCompra) {
         this.subtotalCompra = subtotalCompra;
     }
 
-    public BigDecimal getPrecioUnitarioCompra() {
+    public int getPrecioUnitarioCompra() {
         return precioUnitarioCompra;
     }
 
-    public void setPrecioUnitarioCompra(BigDecimal precioUnitarioCompra) {
+    public void setPrecioUnitarioCompra(int precioUnitarioCompra) {
         this.precioUnitarioCompra = precioUnitarioCompra;
     }
 

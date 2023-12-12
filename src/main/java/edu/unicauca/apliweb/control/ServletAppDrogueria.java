@@ -138,11 +138,12 @@ public class ServletAppDrogueria extends HttpServlet {
                 prdJPA = new ProductoJpaController(emf);
                 //esta parte es solamente para realizar la prueba:
                 //listamos todos los clientes de la base de datos y los imprimimos en consola
-                List<Producto> listaProductos = prdJPA.findProductoEntities();
+                //List<Producto> listaProductos = prdJPA.findProductoEntities();
                 //imprimimos los clientes en consola
-                for(Producto prd: listaProductos){
-                System.out.println("Nombre "+prd.getNombreProducto());
-                }
+                //for(Producto prd: listaProductos){
+                //System.out.println("Nombre "+prd.getNombreProducto());
+               // }
+               
         }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
@@ -158,7 +159,7 @@ public class ServletAppDrogueria extends HttpServlet {
         String dateFormatPattern = "yyyy-MM-dd"; // Ajusta el formato según la cadena proporcionada
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
         
-       int cod = Integer.parseInt(request.getParameter("id"));
+      // int cod = Integer.parseInt(request.getParameter("id"));
       // int categoria = Integer.parseInt(request.getParameter("categoria"));
        String nombrePrd = request.getParameter("nombrePrd");
        int precioPub = Integer.parseInt(request.getParameter("precioPub"));
@@ -168,7 +169,7 @@ public class ServletAppDrogueria extends HttpServlet {
        String laboratorio = request.getParameter("laboratorio");
        
        Producto prd = new Producto();
-       prd.setCodProducto(cod);
+      // prd.setCodProducto(cod);
        prd.setNombreProducto(nombrePrd);
        prd.setPrecioCompraPrd(precioCompra);
        prd.setPrecioPublicoPrd(precioPub);

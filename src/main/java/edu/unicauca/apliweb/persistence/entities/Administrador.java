@@ -10,9 +10,11 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,13 +43,16 @@ public class Administrador implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "SUELDO_ADMIN")
-    private long sueldoAdmin;
+    private int sueldoAdmin;
     @Basic(optional = false)
     @NotNull
     @Column(name = "COMISIONES_ADMIN")
-    private long comisionesAdmin;
+    private int comisionesAdmin;
     @OneToMany(mappedBy = "ccUsuario")
     private List<Compra> compraList;
+    @JoinColumn(name = "CC_USUARIO", referencedColumnName = "CC_USUARIO", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Trabajador trabajador;
 
     public Administrador() {
     }
@@ -56,7 +61,7 @@ public class Administrador implements Serializable {
         this.ccUsuario = ccUsuario;
     }
 
-    public Administrador(Integer ccUsuario, long sueldoAdmin, long comisionesAdmin) {
+    public Administrador(Integer ccUsuario, int sueldoAdmin, int comisionesAdmin) {
         this.ccUsuario = ccUsuario;
         this.sueldoAdmin = sueldoAdmin;
         this.comisionesAdmin = comisionesAdmin;
@@ -70,19 +75,19 @@ public class Administrador implements Serializable {
         this.ccUsuario = ccUsuario;
     }
 
-    public long getSueldoAdmin() {
+    public int getSueldoAdmin() {
         return sueldoAdmin;
     }
 
-    public void setSueldoAdmin(long sueldoAdmin) {
+    public void setSueldoAdmin(int sueldoAdmin) {
         this.sueldoAdmin = sueldoAdmin;
     }
 
-    public long getComisionesAdmin() {
+    public int getComisionesAdmin() {
         return comisionesAdmin;
     }
 
-    public void setComisionesAdmin(long comisionesAdmin) {
+    public void setComisionesAdmin(int comisionesAdmin) {
         this.comisionesAdmin = comisionesAdmin;
     }
 
@@ -93,6 +98,14 @@ public class Administrador implements Serializable {
 
     public void setCompraList(List<Compra> compraList) {
         this.compraList = compraList;
+    }
+
+    public Trabajador getTrabajador() {
+        return trabajador;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
     }
 
     @Override
