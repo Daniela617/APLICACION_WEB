@@ -7,10 +7,16 @@ package edu.unicauca.apliweb.control;
 
 import edu.unicauca.apliweb.persistence.entities.Producto;
 import edu.unicauca.apliweb.persistence.jpa.ProductoJpaController;
+import edu.unicauca.apliweb.persistence.jpa.exceptions.IllegalOrphanException;
+import edu.unicauca.apliweb.persistence.jpa.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
@@ -39,7 +45,7 @@ public class ServletAppDrogueria extends HttpServlet {
      */
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
             String action = request.getServletPath();
             try{
@@ -85,7 +91,11 @@ public class ServletAppDrogueria extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ServletAppDrogueria.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -99,7 +109,11 @@ public class ServletAppDrogueria extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ServletAppDrogueria.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -139,22 +153,46 @@ public class ServletAppDrogueria extends HttpServlet {
     }
 
     private void insertProducto(HttpServletRequest request, HttpServletResponse response) 
-    throws SQLException, ServletException, IOException
+    throws SQLException, ServletException, IOException, ParseException, Exception
     {
-       int cod;
-       //traerse categoria
-       String nombrePrd;
-       int precioPub;
-       int precioCompra;
-       //fecha
-       int cantidad;
-       String laboratorio;
+        String dateFormatPattern = "yyyy-MM-dd"; // Ajusta el formato según la cadena proporcionada
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
+        
+       int cod = Integer.parseInt(request.getParameter("id"));
+      // int categoria = Integer.parseInt(request.getParameter("categoria"));
+       String nombrePrd = request.getParameter("nombrePrd");
+       int precioPub = Integer.parseInt(request.getParameter("precioPub"));
+       int precioCompra = Integer.parseInt(request.getParameter("precioCompra"));
+       String fecha = request.getParameter("fecha");
+       int cantidad = Integer.parseInt(request.getParameter("cantidad"));; 
+       String laboratorio = request.getParameter("laboratorio");
+       
+       Producto prd = new Producto();
+       prd.setCodProducto(cod);
+       prd.setNombreProducto(nombrePrd);
+       prd.setPrecioCompraPrd(precioCompra);
+       prd.setPrecioPublicoPrd(precioPub);
+       prd.setFechaVencimientoPrd( dateFormat.parse(fecha));
+       prd.setProductoCantidad((short) cantidad);
+       prd.setLaboratorio(laboratorio);
+       //falta lab y proveedor
+       
+       prdJPA.create(prd);
+       response.sendRedirect("list");
        
        
    }
 
-    private void deleteProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void deleteProducto(HttpServletRequest request, HttpServletResponse response) throws IllegalOrphanException, IOException {
+            int id = Integer.parseInt(request.getParameter("id"));
+            try {
+            //Elimina el cliente con el id indicado
+            prdJPA.destroy(id);
+            } catch (NonexistentEntityException ex) {
+            Logger.getLogger(ServletAppDrogueria.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            response.sendRedirect("list");
+
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) 
@@ -173,8 +211,37 @@ public class ServletAppDrogueria extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void updateProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void updateProducto(HttpServletRequest request, HttpServletResponse response) throws ParseException, Exception {
+             String dateFormatPattern = "yyyy-MM-dd"; // Ajusta el formato según la cadena proporcionada
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
+        
+       int cod = Integer.parseInt(request.getParameter("id"));
+      // int categoria = Integer.parseInt(request.getParameter("categoria"));
+       String nombrePrd = request.getParameter("nombrePrd");
+       int precioPub = Integer.parseInt(request.getParameter("precioPub"));
+       int precioCompra = Integer.parseInt(request.getParameter("precioCompra"));
+       String fecha = request.getParameter("fecha");
+       int cantidad = Integer.parseInt(request.getParameter("cantidad"));; 
+       String laboratorio = request.getParameter("laboratorio");
+       
+       Producto prd = new Producto();
+       prd.setCodProducto(cod);
+       prd.setNombreProducto(nombrePrd);
+       prd.setPrecioCompraPrd(precioCompra);
+       prd.setPrecioPublicoPrd(precioPub);
+       prd.setFechaVencimientoPrd( dateFormat.parse(fecha));
+       prd.setProductoCantidad((short) cantidad);
+       prd.setLaboratorio(laboratorio);
+       //falta lab y proveedor
+       
+       try {
+        //Edita el cliente en la BD
+             prdJPA.edit(prd);
+        } catch (Exception ex) {
+        Logger.getLogger(ServletAppDrogueria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        response.sendRedirect("list");
+
     }
 
     private void listProducto(HttpServletRequest request, HttpServletResponse response)
@@ -187,23 +254,3 @@ public class ServletAppDrogueria extends HttpServlet {
     }
 
 }
-/*
-    @Override
-public void init() throws ServletException {
-super.init();
-        //creamos una instancia de la clase EntityManagerFactory
-        //esta clase se encarga de gestionar la construcción de entidades y
-        //permite a los controladores JPA ejecutar las operaciones CRUD
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PU);
-        //creamos una instancia del controldor JPA para la clase clients y le
-        //pasamos el gestor de entidades
-        prdJPA = new ProductoJpaController(emf);
-        //esta parte es solamente para realizar la prueba:
-        //listamos todos los clientes de la base de datos y los imprimimos en consola
-        List<Producto> listaProductos = prdJPA.findProductoEntities();
-        //imprimimos los clientes en consola
-        for(Producto prd: listaProductos){
-        System.out.println("Nombre "+prd.getNombreProducto());
-        }
-}
-*/
