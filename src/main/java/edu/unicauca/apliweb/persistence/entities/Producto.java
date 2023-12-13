@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -87,12 +86,6 @@ public class Producto implements Serializable {
     private List<Proveedor> proveedorList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codProducto")
     private List<Compra> compraList;
-    @JoinColumn(name = "COD_CATEGORIA", referencedColumnName = "COD_CATEGORIA")
-    @ManyToOne
-    private Categoria codCategoria;
-    @JoinColumn(name = "COD_DEVOLUCION", referencedColumnName = "COD_DEVOLUCION")
-    @ManyToOne
-    private RegistroDevolucion codDevolucion;
 
     public Producto() {
     }
@@ -183,22 +176,6 @@ public class Producto implements Serializable {
 
     public void setCompraList(List<Compra> compraList) {
         this.compraList = compraList;
-    }
-
-    public Categoria getCodCategoria() {
-        return codCategoria;
-    }
-
-    public void setCodCategoria(Categoria codCategoria) {
-        this.codCategoria = codCategoria;
-    }
-
-    public RegistroDevolucion getCodDevolucion() {
-        return codDevolucion;
-    }
-
-    public void setCodDevolucion(RegistroDevolucion codDevolucion) {
-        this.codDevolucion = codDevolucion;
     }
 
     @Override

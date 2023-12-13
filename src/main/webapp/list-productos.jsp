@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,17 +130,19 @@
                                                 <td><c:out value="${producto.codProducto}" /></td>
                                                 <td><c:out value="${producto.nombreProducto}" /></td>
                                                 <td><c:out value="${producto.precioPublicoPrd}" /></td>
-                                                <td><c:out value="${producto.fechaVencimientoPrd}" /></td>
+                                                <td>
+                                                     <fmt:formatDate value="${producto.fechaVencimientoPrd}" pattern="dd/MM/yyyy" />
+                                                </td>
                                                 <td><c:out value="${producto.productoCantidad}" /></td>
                                                 <td><c:out value="${producto.laboratorio}" /></td>
                                                 <td>
                                                     <div class="button-container">
-                                                        <a href="edit_products">
+                                                        <a href="edit?id=<c:out value='${producto.codProducto}' />">
                                                             <button class="btn btn-editar"  title="Editar">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                             </button>
                                                         </a>
-                                                        <a href="delete_products">
+                                                        <a href="delete?id=<c:out value='${producto.codProducto}' />">
                                                             <button  class="btn btn-eliminar"  title="Eliminar" style="margin-left: 5px;">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </button>

@@ -9,8 +9,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import edu.unicauca.apliweb.persistence.entities.Categoria;
-import edu.unicauca.apliweb.persistence.entities.RegistroDevolucion;
 import edu.unicauca.apliweb.persistence.entities.Proveedor;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +45,6 @@ public class ProductoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Categoria codCategoria = producto.getCodCategoria();
-            if (codCategoria != null) {
-                codCategoria = em.getReference(codCategoria.getClass(), codCategoria.getCodCategoria());
-                producto.setCodCategoria(codCategoria);
-            }
-            RegistroDevolucion codDevolucion = producto.getCodDevolucion();
-            if (codDevolucion != null) {
-                codDevolucion = em.getReference(codDevolucion.getClass(), codDevolucion.getCodDevolucion());
-                producto.setCodDevolucion(codDevolucion);
-            }
             List<Proveedor> attachedProveedorList = new ArrayList<Proveedor>();
             for (Proveedor proveedorListProveedorToAttach : producto.getProveedorList()) {
                 proveedorListProveedorToAttach = em.getReference(proveedorListProveedorToAttach.getClass(), proveedorListProveedorToAttach.getCodProveedor());
@@ -70,14 +58,6 @@ public class ProductoJpaController implements Serializable {
             }
             producto.setCompraList(attachedCompraList);
             em.persist(producto);
-            if (codCategoria != null) {
-                codCategoria.getProductoList().add(producto);
-                codCategoria = em.merge(codCategoria);
-            }
-            if (codDevolucion != null) {
-                codDevolucion.getProductoList().add(producto);
-                codDevolucion = em.merge(codDevolucion);
-            }
             for (Proveedor proveedorListProveedor : producto.getProveedorList()) {
                 proveedorListProveedor.getProductoList().add(producto);
                 proveedorListProveedor = em.merge(proveedorListProveedor);
@@ -105,10 +85,6 @@ public class ProductoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Producto persistentProducto = em.find(Producto.class, producto.getCodProducto());
-            Categoria codCategoriaOld = persistentProducto.getCodCategoria();
-            Categoria codCategoriaNew = producto.getCodCategoria();
-            RegistroDevolucion codDevolucionOld = persistentProducto.getCodDevolucion();
-            RegistroDevolucion codDevolucionNew = producto.getCodDevolucion();
             List<Proveedor> proveedorListOld = persistentProducto.getProveedorList();
             List<Proveedor> proveedorListNew = producto.getProveedorList();
             List<Compra> compraListOld = persistentProducto.getCompraList();
@@ -125,14 +101,6 @@ public class ProductoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (codCategoriaNew != null) {
-                codCategoriaNew = em.getReference(codCategoriaNew.getClass(), codCategoriaNew.getCodCategoria());
-                producto.setCodCategoria(codCategoriaNew);
-            }
-            if (codDevolucionNew != null) {
-                codDevolucionNew = em.getReference(codDevolucionNew.getClass(), codDevolucionNew.getCodDevolucion());
-                producto.setCodDevolucion(codDevolucionNew);
-            }
             List<Proveedor> attachedProveedorListNew = new ArrayList<Proveedor>();
             for (Proveedor proveedorListNewProveedorToAttach : proveedorListNew) {
                 proveedorListNewProveedorToAttach = em.getReference(proveedorListNewProveedorToAttach.getClass(), proveedorListNewProveedorToAttach.getCodProveedor());
@@ -148,22 +116,6 @@ public class ProductoJpaController implements Serializable {
             compraListNew = attachedCompraListNew;
             producto.setCompraList(compraListNew);
             producto = em.merge(producto);
-            if (codCategoriaOld != null && !codCategoriaOld.equals(codCategoriaNew)) {
-                codCategoriaOld.getProductoList().remove(producto);
-                codCategoriaOld = em.merge(codCategoriaOld);
-            }
-            if (codCategoriaNew != null && !codCategoriaNew.equals(codCategoriaOld)) {
-                codCategoriaNew.getProductoList().add(producto);
-                codCategoriaNew = em.merge(codCategoriaNew);
-            }
-            if (codDevolucionOld != null && !codDevolucionOld.equals(codDevolucionNew)) {
-                codDevolucionOld.getProductoList().remove(producto);
-                codDevolucionOld = em.merge(codDevolucionOld);
-            }
-            if (codDevolucionNew != null && !codDevolucionNew.equals(codDevolucionOld)) {
-                codDevolucionNew.getProductoList().add(producto);
-                codDevolucionNew = em.merge(codDevolucionNew);
-            }
             for (Proveedor proveedorListOldProveedor : proveedorListOld) {
                 if (!proveedorListNew.contains(proveedorListOldProveedor)) {
                     proveedorListOldProveedor.getProductoList().remove(producto);
@@ -226,16 +178,6 @@ public class ProductoJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Categoria codCategoria = producto.getCodCategoria();
-            if (codCategoria != null) {
-                codCategoria.getProductoList().remove(producto);
-                codCategoria = em.merge(codCategoria);
-            }
-            RegistroDevolucion codDevolucion = producto.getCodDevolucion();
-            if (codDevolucion != null) {
-                codDevolucion.getProductoList().remove(producto);
-                codDevolucion = em.merge(codDevolucion);
             }
             List<Proveedor> proveedorList = producto.getProveedorList();
             for (Proveedor proveedorListProveedor : proveedorList) {

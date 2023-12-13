@@ -15,47 +15,40 @@
     />
   </head>
   <body class="bg-info d-flex justify-content-center align-items-center vh-100">
-    <div
-      class="bg-white p-5 rounded-5 text-secondary shadow"
-      style="width: 25rem"
-    >
-      <div class="d-flex justify-content-center" style="font-size: 5rem;">
-        🌐
-      </div>
-      <div class="text-center fs-1 fw-bold">Login</div>
-      <div class="input-group mt-4">
-        <div class="input-group-text bg-info" style="color: white;">
-          🧑‍
-        </div>
-        <input
-          class="form-control bg-light"
-          type="text"
-          name ="user"
-          placeholder="Usuario"
-        />
-      </div>
-      <div class="input-group mt-1">
-        <div class="input-group-text bg-info">
-          🔐
-        </div>
-        <input
-          class="form-control bg-light"
-          type="password"
-          name ="password"
-          placeholder="Contraseña"
-        />
-      </div>
-      <div class="d-flex justify-content-around mt-1">
-        <div class="d-flex align-items-center gap-1">
-          
-        </div>
-        <div class="pt-1">
-         
-        </div>
-      </div>
-      <div class="btn btn-info text-white w-100 mt-4 fw-semibold shadow-sm">
-        Iniciar Sesión
-      </div>
-    </div>
+        <form action="ServletAppDrogueria" method="post">
+          <input type="hidden" name="action" value="ingresar">
+          <!-- Otros campos del formulario -->
+          <div class="bg-white p-5 rounded-5 text-secondary shadow" style="width: 25rem">
+            <div class="d-flex justify-content-center" style="font-size: 5rem;">
+              🌐
+            </div>
+            <div class="text-center fs-1 fw-bold">Login</div>
+            <div class="input-group mt-4">
+              <div class="input-group-text bg-info" style="color: white;">
+                🧑‍
+              </div>
+              <input
+                class="form-control bg-light"
+                type="text"
+                name="user"
+                placeholder="Usuario"
+              />
+            </div>
+            <div class="input-group mt-1">
+              <div class="input-group-text bg-info">
+                🔐
+              </div>
+              <input
+                class="form-control bg-light"
+                type="password"
+                name="password"
+                placeholder="Contraseña"
+              />
+            </div>
+            <button type="submit" class="btn btn-info text-white w-100 mt-4 fw-semibold shadow-sm">
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
   </body>
 </html>

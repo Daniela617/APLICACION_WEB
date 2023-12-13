@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="edu.unicauca.apliweb.persistence.entities.Producto" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +31,7 @@
         .cabecera {
             background-color: #369cdd;
             width: 100%;
-            height: 11vh;/* Cambia la altura según tus preferencias */
+            height: 11vh;/* Cambia la altura segï¿½n tus preferencias */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -100,37 +102,57 @@
        
         <div class="separador"></div>
         <div class="titulo-pagina">
-            <h1 class="titulo">Crear producto</h1>
+            <h1 class="titulo">Gestionar productos</h1>
         </div>
        
     </div>
     <div class="container p-3">
                 
             <div class="card card-body" style="border: 2px solid #369cdd;">
-                <form >
-                    <div class="form-group mb-3">
+                <c:if test="${producto != null}">
+                    <form action="update" method="post" >
+                </c:if>
+                <c:if test="${producto == null}">
+                    <form action="insert" method="post" >
+                </c:if>
+                <caption>
+                    <h2>
+                        <c:if test="${producto != null}">
+                            Editar Producto
+                        </c:if>
+
+                        <c:if test="${producto == null}">
+                            Nuevo Producto
+                        </c:if>
+                    </h2>
+                </caption>
+                    <c:if test="${producto.nombreProducto != null}">
+                        <input type="hidden" name="id" value="<c:out value='${producto.codProducto}' />" />
+                    </c:if>
+                        
+                    <div class="form-group mb-3">  
                         <label for="Precio compra">Nombre del producto</label>
-                        <input type="text" name="nombre" class="form-control" placeholder="Nombre producto" autofocus>
+                        <input type="text" name="nombrePrd" value="<c:out value='${producto.nombreProducto}' />" class="form-control" placeholder="Nombre producto" autofocus>
                     </div>
                     <div class="form-group mb-3">
                         <label for="Precio compra">Precio de venta</label>
-                        <input type="text" name="precioPublico" row = '2' class="form-control" placeholder="Precio público" autofocus>
+                        <input type="text" name="precioPub" value="<c:out value='${producto.precioPublicoPrd}' />" class="form-control" placeholder="Precio pï¿½blico" autofocus>
                     </div>
                     <div class="form-group mb-3">
                         <label for="Precio compra">Precio de compra</label>
-                        <input type="text" name="precioCompra" row = '3' class="form-control" placeholder="Precio compra" autofocus>
+                        <input type="text" name="precioCompra" value="<c:out value='${producto.precioCompraPrd}' />" class="form-control" placeholder="Precio compra" autofocus>
                     </div>
                     <div class="form-group mb-3">
                         <label for="fecha">Fecha de vencimiento</label>
-                        <input type="date" id="fecha" row = '4' name="fecha" class="form-control">
+                        <input type="date" name="fecha" value="<c:out value='${producto.fechaVencimientoPrd}' />" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="Precio compra">Cantidad de existencias</label>
-                        <input type="text" name="cantidad" row = '5' class="form-control" placeholder="Cantidad" autofocus>
+                        <input type="text" name="cantidad" value="<c:out value='${producto.productoCantidad}' />" class="form-control" placeholder="Cantidad" autofocus>
                     </div>
                     <div class="form-group mb-3">
                         <label for="Precio compra">Laboratorio</label>
-                        <input type="text" name="laboratorio" row = '6' class="form-control" placeholder="Laboratorio" autofocus>
+                        <input type="text" name="laboratorio" value="<c:out value='${producto.laboratorio}' />" class="form-control" placeholder="Laboratorio" autofocus>
                     </div>
                     <div class="btn-group">
                         <input type="submit" class="btn btn-success custom-btn" name="save_product" value="Guardar">

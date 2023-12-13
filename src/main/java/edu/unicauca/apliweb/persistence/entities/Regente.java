@@ -5,9 +5,7 @@
 package edu.unicauca.apliweb.persistence.entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,13 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -55,10 +51,6 @@ public class Regente implements Serializable {
     @JoinColumn(name = "CC_USUARIO", referencedColumnName = "CC_USUARIO", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Trabajador trabajador;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ccUsuario")
-    private List<RegistroDevolucion> registroDevolucionList;
-    @OneToMany(mappedBy = "ccUsuario")
-    private List<AtencionMedica> atencionMedicaList;
 
     public Regente() {
     }
@@ -103,24 +95,6 @@ public class Regente implements Serializable {
 
     public void setTrabajador(Trabajador trabajador) {
         this.trabajador = trabajador;
-    }
-
-    @XmlTransient
-    public List<RegistroDevolucion> getRegistroDevolucionList() {
-        return registroDevolucionList;
-    }
-
-    public void setRegistroDevolucionList(List<RegistroDevolucion> registroDevolucionList) {
-        this.registroDevolucionList = registroDevolucionList;
-    }
-
-    @XmlTransient
-    public List<AtencionMedica> getAtencionMedicaList() {
-        return atencionMedicaList;
-    }
-
-    public void setAtencionMedicaList(List<AtencionMedica> atencionMedicaList) {
-        this.atencionMedicaList = atencionMedicaList;
     }
 
     @Override

@@ -4,20 +4,18 @@
  */
 package edu.unicauca.apliweb.persistence.jpa;
 
+import edu.unicauca.apliweb.persistence.entities.Regente;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import edu.unicauca.apliweb.persistence.entities.Trabajador;
-import edu.unicauca.apliweb.persistence.entities.RegistroDevolucion;
-import java.util.ArrayList;
-import java.util.List;
-import edu.unicauca.apliweb.persistence.entities.AtencionMedica;
-import edu.unicauca.apliweb.persistence.entities.Regente;
 import edu.unicauca.apliweb.persistence.jpa.exceptions.IllegalOrphanException;
 import edu.unicauca.apliweb.persistence.jpa.exceptions.NonexistentEntityException;
 import edu.unicauca.apliweb.persistence.jpa.exceptions.PreexistingEntityException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -37,12 +35,6 @@ public class RegenteJpaController implements Serializable {
     }
 
     public void create(Regente regente) throws IllegalOrphanException, PreexistingEntityException, Exception {
-        if (regente.getRegistroDevolucionList() == null) {
-            regente.setRegistroDevolucionList(new ArrayList<RegistroDevolucion>());
-        }
-        if (regente.getAtencionMedicaList() == null) {
-            regente.setAtencionMedicaList(new ArrayList<AtencionMedica>());
-        }
         List<String> illegalOrphanMessages = null;
         Trabajador trabajadorOrphanCheck = regente.getTrabajador();
         if (trabajadorOrphanCheck != null) {
@@ -66,40 +58,10 @@ public class RegenteJpaController implements Serializable {
                 trabajador = em.getReference(trabajador.getClass(), trabajador.getCcUsuario());
                 regente.setTrabajador(trabajador);
             }
-            List<RegistroDevolucion> attachedRegistroDevolucionList = new ArrayList<RegistroDevolucion>();
-            for (RegistroDevolucion registroDevolucionListRegistroDevolucionToAttach : regente.getRegistroDevolucionList()) {
-                registroDevolucionListRegistroDevolucionToAttach = em.getReference(registroDevolucionListRegistroDevolucionToAttach.getClass(), registroDevolucionListRegistroDevolucionToAttach.getCodDevolucion());
-                attachedRegistroDevolucionList.add(registroDevolucionListRegistroDevolucionToAttach);
-            }
-            regente.setRegistroDevolucionList(attachedRegistroDevolucionList);
-            List<AtencionMedica> attachedAtencionMedicaList = new ArrayList<AtencionMedica>();
-            for (AtencionMedica atencionMedicaListAtencionMedicaToAttach : regente.getAtencionMedicaList()) {
-                atencionMedicaListAtencionMedicaToAttach = em.getReference(atencionMedicaListAtencionMedicaToAttach.getClass(), atencionMedicaListAtencionMedicaToAttach.getFechaAtmedica());
-                attachedAtencionMedicaList.add(atencionMedicaListAtencionMedicaToAttach);
-            }
-            regente.setAtencionMedicaList(attachedAtencionMedicaList);
             em.persist(regente);
             if (trabajador != null) {
                 trabajador.setRegente(regente);
                 trabajador = em.merge(trabajador);
-            }
-            for (RegistroDevolucion registroDevolucionListRegistroDevolucion : regente.getRegistroDevolucionList()) {
-                Regente oldCcUsuarioOfRegistroDevolucionListRegistroDevolucion = registroDevolucionListRegistroDevolucion.getCcUsuario();
-                registroDevolucionListRegistroDevolucion.setCcUsuario(regente);
-                registroDevolucionListRegistroDevolucion = em.merge(registroDevolucionListRegistroDevolucion);
-                if (oldCcUsuarioOfRegistroDevolucionListRegistroDevolucion != null) {
-                    oldCcUsuarioOfRegistroDevolucionListRegistroDevolucion.getRegistroDevolucionList().remove(registroDevolucionListRegistroDevolucion);
-                    oldCcUsuarioOfRegistroDevolucionListRegistroDevolucion = em.merge(oldCcUsuarioOfRegistroDevolucionListRegistroDevolucion);
-                }
-            }
-            for (AtencionMedica atencionMedicaListAtencionMedica : regente.getAtencionMedicaList()) {
-                Regente oldCcUsuarioOfAtencionMedicaListAtencionMedica = atencionMedicaListAtencionMedica.getCcUsuario();
-                atencionMedicaListAtencionMedica.setCcUsuario(regente);
-                atencionMedicaListAtencionMedica = em.merge(atencionMedicaListAtencionMedica);
-                if (oldCcUsuarioOfAtencionMedicaListAtencionMedica != null) {
-                    oldCcUsuarioOfAtencionMedicaListAtencionMedica.getAtencionMedicaList().remove(atencionMedicaListAtencionMedica);
-                    oldCcUsuarioOfAtencionMedicaListAtencionMedica = em.merge(oldCcUsuarioOfAtencionMedicaListAtencionMedica);
-                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -122,10 +84,6 @@ public class RegenteJpaController implements Serializable {
             Regente persistentRegente = em.find(Regente.class, regente.getCcUsuario());
             Trabajador trabajadorOld = persistentRegente.getTrabajador();
             Trabajador trabajadorNew = regente.getTrabajador();
-            List<RegistroDevolucion> registroDevolucionListOld = persistentRegente.getRegistroDevolucionList();
-            List<RegistroDevolucion> registroDevolucionListNew = regente.getRegistroDevolucionList();
-            List<AtencionMedica> atencionMedicaListOld = persistentRegente.getAtencionMedicaList();
-            List<AtencionMedica> atencionMedicaListNew = regente.getAtencionMedicaList();
             List<String> illegalOrphanMessages = null;
             if (trabajadorNew != null && !trabajadorNew.equals(trabajadorOld)) {
                 Regente oldRegenteOfTrabajador = trabajadorNew.getRegente();
@@ -136,14 +94,6 @@ public class RegenteJpaController implements Serializable {
                     illegalOrphanMessages.add("The Trabajador " + trabajadorNew + " already has an item of type Regente whose trabajador column cannot be null. Please make another selection for the trabajador field.");
                 }
             }
-            for (RegistroDevolucion registroDevolucionListOldRegistroDevolucion : registroDevolucionListOld) {
-                if (!registroDevolucionListNew.contains(registroDevolucionListOldRegistroDevolucion)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain RegistroDevolucion " + registroDevolucionListOldRegistroDevolucion + " since its ccUsuario field is not nullable.");
-                }
-            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -151,20 +101,6 @@ public class RegenteJpaController implements Serializable {
                 trabajadorNew = em.getReference(trabajadorNew.getClass(), trabajadorNew.getCcUsuario());
                 regente.setTrabajador(trabajadorNew);
             }
-            List<RegistroDevolucion> attachedRegistroDevolucionListNew = new ArrayList<RegistroDevolucion>();
-            for (RegistroDevolucion registroDevolucionListNewRegistroDevolucionToAttach : registroDevolucionListNew) {
-                registroDevolucionListNewRegistroDevolucionToAttach = em.getReference(registroDevolucionListNewRegistroDevolucionToAttach.getClass(), registroDevolucionListNewRegistroDevolucionToAttach.getCodDevolucion());
-                attachedRegistroDevolucionListNew.add(registroDevolucionListNewRegistroDevolucionToAttach);
-            }
-            registroDevolucionListNew = attachedRegistroDevolucionListNew;
-            regente.setRegistroDevolucionList(registroDevolucionListNew);
-            List<AtencionMedica> attachedAtencionMedicaListNew = new ArrayList<AtencionMedica>();
-            for (AtencionMedica atencionMedicaListNewAtencionMedicaToAttach : atencionMedicaListNew) {
-                atencionMedicaListNewAtencionMedicaToAttach = em.getReference(atencionMedicaListNewAtencionMedicaToAttach.getClass(), atencionMedicaListNewAtencionMedicaToAttach.getFechaAtmedica());
-                attachedAtencionMedicaListNew.add(atencionMedicaListNewAtencionMedicaToAttach);
-            }
-            atencionMedicaListNew = attachedAtencionMedicaListNew;
-            regente.setAtencionMedicaList(atencionMedicaListNew);
             regente = em.merge(regente);
             if (trabajadorOld != null && !trabajadorOld.equals(trabajadorNew)) {
                 trabajadorOld.setRegente(null);
@@ -173,34 +109,6 @@ public class RegenteJpaController implements Serializable {
             if (trabajadorNew != null && !trabajadorNew.equals(trabajadorOld)) {
                 trabajadorNew.setRegente(regente);
                 trabajadorNew = em.merge(trabajadorNew);
-            }
-            for (RegistroDevolucion registroDevolucionListNewRegistroDevolucion : registroDevolucionListNew) {
-                if (!registroDevolucionListOld.contains(registroDevolucionListNewRegistroDevolucion)) {
-                    Regente oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion = registroDevolucionListNewRegistroDevolucion.getCcUsuario();
-                    registroDevolucionListNewRegistroDevolucion.setCcUsuario(regente);
-                    registroDevolucionListNewRegistroDevolucion = em.merge(registroDevolucionListNewRegistroDevolucion);
-                    if (oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion != null && !oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion.equals(regente)) {
-                        oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion.getRegistroDevolucionList().remove(registroDevolucionListNewRegistroDevolucion);
-                        oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion = em.merge(oldCcUsuarioOfRegistroDevolucionListNewRegistroDevolucion);
-                    }
-                }
-            }
-            for (AtencionMedica atencionMedicaListOldAtencionMedica : atencionMedicaListOld) {
-                if (!atencionMedicaListNew.contains(atencionMedicaListOldAtencionMedica)) {
-                    atencionMedicaListOldAtencionMedica.setCcUsuario(null);
-                    atencionMedicaListOldAtencionMedica = em.merge(atencionMedicaListOldAtencionMedica);
-                }
-            }
-            for (AtencionMedica atencionMedicaListNewAtencionMedica : atencionMedicaListNew) {
-                if (!atencionMedicaListOld.contains(atencionMedicaListNewAtencionMedica)) {
-                    Regente oldCcUsuarioOfAtencionMedicaListNewAtencionMedica = atencionMedicaListNewAtencionMedica.getCcUsuario();
-                    atencionMedicaListNewAtencionMedica.setCcUsuario(regente);
-                    atencionMedicaListNewAtencionMedica = em.merge(atencionMedicaListNewAtencionMedica);
-                    if (oldCcUsuarioOfAtencionMedicaListNewAtencionMedica != null && !oldCcUsuarioOfAtencionMedicaListNewAtencionMedica.equals(regente)) {
-                        oldCcUsuarioOfAtencionMedicaListNewAtencionMedica.getAtencionMedicaList().remove(atencionMedicaListNewAtencionMedica);
-                        oldCcUsuarioOfAtencionMedicaListNewAtencionMedica = em.merge(oldCcUsuarioOfAtencionMedicaListNewAtencionMedica);
-                    }
-                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -219,7 +127,7 @@ public class RegenteJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -231,26 +139,10 @@ public class RegenteJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The regente with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<RegistroDevolucion> registroDevolucionListOrphanCheck = regente.getRegistroDevolucionList();
-            for (RegistroDevolucion registroDevolucionListOrphanCheckRegistroDevolucion : registroDevolucionListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Regente (" + regente + ") cannot be destroyed since the RegistroDevolucion " + registroDevolucionListOrphanCheckRegistroDevolucion + " in its registroDevolucionList field has a non-nullable ccUsuario field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Trabajador trabajador = regente.getTrabajador();
             if (trabajador != null) {
                 trabajador.setRegente(null);
                 trabajador = em.merge(trabajador);
-            }
-            List<AtencionMedica> atencionMedicaList = regente.getAtencionMedicaList();
-            for (AtencionMedica atencionMedicaListAtencionMedica : atencionMedicaList) {
-                atencionMedicaListAtencionMedica.setCcUsuario(null);
-                atencionMedicaListAtencionMedica = em.merge(atencionMedicaListAtencionMedica);
             }
             em.remove(regente);
             em.getTransaction().commit();
